@@ -13,32 +13,32 @@ class MigrateDataToNewStatuses extends Migration {
 	public function up()
 	{
 		// get newly added statuses from last migration
-		$statuses = DB::select('select * from ' . DB::getTablePrefix() . 'status_labels where name="Pending" OR name="Ready to Deploy"');
+		$statuses = DB::select("select * from " . DB::getTablePrefix() . "status_labels where name='Pending' OR name='Ready to Deploy'");
 
 
 		foreach ($statuses as $status) {
-			if ($status->name =="Pending") {
+			if ($status->name =='Pending') {
 				$pending_id = array($status->id);
-			} elseif ($status->name =="Ready to Deploy") {
+			} elseif ($status->name =='Ready to Deploy') {
 				$rtd_id = array($status->id);
 			}
 		}
 
 		// Pending
-		$pendings = DB::select('select * from ' . DB::getTablePrefix() . 'assets where status_id IS NULL AND physical=1 ');
+		$pendings = DB::select("select * from " . DB::getTablePrefix() . "assets where status_id is null AND cast(physical as integer) =1 ");
 
 			foreach ($pendings as $pending) {
-				DB::update('update ' . DB::getTablePrefix() . 'assets set status_id = ? where status_id IS NULL AND physical=1',$pending_id);
+				DB::update("update " . DB::getTablePrefix() . "assets set status_id = ? where status_id IS NULL AND cast(physical as integer)=1",$pending_id);
 
 			}
 
 
 		// Ready to Deploy
-		$rtds = DB::select('select * from ' . DB::getTablePrefix() . 'assets where status_id = 0 AND physical=1 ');
+		$rtds = DB::select("select * from " . DB::getTablePrefix() . "assets where status_id = 0 AND cast(physical as integer)=1 ");
 
 		foreach ($rtds as $rtd) {
 				//DB::update('update users set votes = 100 where name = ?', array('John'));
-				DB::update('update ' . DB::getTablePrefix() . 'assets set status_id = ? where status_id = 0 AND physical=1',$rtd_id);
+				DB::update("update " . DB::getTablePrefix() . "assets set status_id = ? where status_id = 0 AND cast(physical as integer)=1",$rtd_id);
 
 			}
 

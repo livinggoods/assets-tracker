@@ -81,6 +81,14 @@ class AppServiceProvider extends ServiceProvider
     {
         $monolog = Log::getMonolog();
 
+        /*if ($this->app->environment() !== 'production') {
+            $this->app->register(\Way\Generators\GeneratorsServiceProvider::class);
+            $this->app->register(\Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class);
+        }*/
+        if ($this->app->environment() == 'local') {
+            $this->app->register('Laracasts\Generators\GeneratorsServiceProvider');
+        }
+
         if (config('app.debug')) {
             $log_level = 'debug';
         } else {

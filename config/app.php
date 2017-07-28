@@ -94,7 +94,7 @@ return [
 
     'key' => env('APP_KEY'),
 
-    'cipher' => 'rijndael-256',
+    'cipher' => 'AES-256-CBC',
 
     /*
     |--------------------------------------------------------------------------
@@ -218,7 +218,12 @@ return [
         /*
          * Custom service provider
          */
-         App\Providers\MacroServiceProvider::class,
+        App\Providers\MacroServiceProvider::class,
+
+        //Migrations Generator
+        //Way\Generators\GeneratorsServiceProvider::class,
+        //Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider::class,
+        //'Laracasts\Generators\GeneratorsServiceProvider',
 
 
     ],
